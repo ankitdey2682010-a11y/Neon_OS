@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CYBER_OS v3.0</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body data-theme="cyberpunk">
+
+  <div id="desktop">
+    <div class="desktop-icon" onclick="openApp('terminal')">
+      <div class="icon">📟</div>
+      <span>TERMINAL</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('files')">
+      <div class="icon">📁</div>
+      <span>EXPLORER</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('calc')">
+      <div class="icon">🧮</div>
+      <span>CALC</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('visualizer')">
+      <div class="icon">🌌</div>
+      <span>MATRIX</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('notepad')">
+      <div class="icon">📝</div>
+      <span>NOTES</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('system')">
+      <div class="icon">⚙️</div>
+      <span>SYSTEM</span>
+    </div>
+    <div class="desktop-icon" onclick="openApp('themes')">
+      <div class="icon">🎨</div>
+      <span>THEMES</span>
+    </div>
+  </div>
+
+  <div id="start-menu" class="hidden">
+    <div class="start-header">
+      <span class="user-badge">OPERATOR // ROOT</span>
+    </div>
+    <div class="start-items">
+      <button onclick="openApp('terminal'); toggleStartMenu();">📟 Terminal</button>
+      <button onclick="openApp('files'); toggleStartMenu();">📁 File Explorer</button>
+      <button onclick="openApp('calc'); toggleStartMenu();">🧮 Calculator</button>
+      <button onclick="openApp('visualizer'); toggleStartMenu();">🌌 Matrix Rain</button>
+      <button onclick="openApp('notepad'); toggleStartMenu();">📝 Notepad</button>
+      <button onclick="openApp('system'); toggleStartMenu();">⚙️ System Diagnostics</button>
+      <button onclick="openApp('themes'); toggleStartMenu();">🎨 Themes & Display</button>
+    </div>
+  </div>
+
+  <div id="taskbar">
+    <div class="taskbar-left">
+      <button class="start-btn" onclick="toggleStartMenu()">ROOT</button>
+      <div id="taskbar-tabs"></div>
+    </div>
+    <div class="clock" id="systemClock">00:00:00</div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
