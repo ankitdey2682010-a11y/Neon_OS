@@ -1,0 +1,432 @@
+
+body[data-theme="cyberpunk"] {
+  --bg: #040508;
+  --panel: #0d111a;
+  --accent: #10fccd;
+  --accent-glow: rgba(3, 229, 184, 0.4);
+  --magenta: #e60977;
+  --text: #d0d6dc;
+  --text-dim: #56667b;
+  --border: rgba(16, 246, 200, 0.25);
+  --tab-active: rgba(7, 145, 117, 0.248);
+}
+
+body[data-theme="matrix"] {
+  --bg: #030a04;
+  --panel: #051408;
+  --accent: #10fe4b;
+  --accent-glow: rgba(7, 247, 67, 0.4);
+  --magenta: #38f864;
+  --text: #b2e3b7;
+  --text-dim: #2d6a4f;
+  --border: rgba(9, 251, 70, 0.3);
+  --tab-active: rgba(0, 255, 65, 0.2);
+}
+
+body[data-theme="synthwave"] {
+  --bg: #150a21;
+  --panel: #1f1035;
+  --accent: #f76fc8;
+  --accent-glow: rgba(255, 113, 206, 0.4);
+  --magenta: #01cdfe;
+  --text: #f9f6f7;
+  --text-dim: #8e48c8;
+  --border: rgba(241, 115, 197, 0.3);
+  --tab-active: rgba(236, 106, 190, 0.2);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+}
+
+body 
+{
+  background: var(--bg);
+  font-family: 'Courier New', Courier, monospace;
+  color: var(--text);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: background 0.3s ease;
+  background-image: 
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+#desktop 
+{
+  flex: 1;
+  position: relative;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 90px);
+  grid-auto-rows: 95px;
+  gap: 16px;
+}
+
+.desktop-icon 
+{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.15s ease;
+}
+
+.desktop-icon:hover 
+{
+  background: rgba(239, 239, 239, 0.05);
+  border-color: var(--border);
+  box-shadow: 0 0 10px var(--accent-glow);
+}
+
+.desktop-icon .icon { font-size: 28px; }
+.desktop-icon span 
+{
+  font-size: 11px;
+  text-align: center;
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.window 
+{
+  position: absolute;
+  width: 460px;
+  min-height: 290px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7), 0 0 15px var(--accent-glow);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.window.minimized 
+{
+  display: none !important;
+}
+
+.window.maximized 
+{
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: calc(100vh - 44px) !important;
+}
+
+.window-header 
+{
+  background: rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: move;
+}
+
+.window-title 
+{
+  font-size: 12px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: bold;
+}
+
+.window-controls button 
+{
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  font-size: 13px;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.window-controls button:hover 
+{
+  color: var(--accent);
+}
+
+.window-body 
+{
+  flex: 1;
+  padding: 14px;
+  overflow-y: auto;
+  font-size: 13px;
+  line-height: 1.4;
+  user-select: text;
+}
+
+.calc-container 
+{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.calc-display 
+{
+  width: 100%;
+  height: 40px;
+  background: rgba(4, 4, 4, 0.5);
+  border: 1px solid var(--border);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 20px;
+  text-align: right;
+  padding: 8px 12px;
+  outline: none;
+}
+
+.calc-grid 
+{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.calc-grid button 
+{
+  background: rgb(26, 25, 25);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: inherit;
+  padding: 14px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.1s ease;
+}
+
+.calc-grid button:hover 
+{
+  background: rgba(240, 240, 240, 0.1);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.calc-grid button.op 
+{
+  color: var(--magenta);
+}
+
+.calc-grid button.equals 
+{
+  background: var(--accent);
+  color: #000;
+  font-weight: bold;
+}
+
+#matrixCanvas 
+{
+  width: 100%;
+  height: 100%;
+  background: #090909;
+  display: block;
+}
+
+textarea.pad 
+{
+  width: 100%;
+  height: 200px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+
+.terminal-logs 
+{
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.terminal-input-row 
+{
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.terminal-input 
+{
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--accent);
+  font-family: inherit;
+  flex: 1;
+}
+
+.file-list
+ {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.file-item 
+{
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 8px;
+  background: rgba(247, 244, 244, 0.02);
+  border: 1px solid var(--border);
+  cursor: pointer;
+}
+
+.file-item:hover 
+{
+  background: rgba(245, 243, 243, 0.08);
+}
+
+.theme-btn-grid 
+{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.theme-btn 
+{
+  padding: 10px;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.theme-btn:hover 
+{
+  background: var(--accent);
+  color: var(--bg);
+}
+
+#taskbar
+ {
+  height: 44px;
+  background: rgba(10, 10, 16, 0.95);
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 100;
+  backdrop-filter: blur(8px);
+}
+
+.taskbar-left 
+{
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.start-btn 
+{
+  background: var(--accent);
+  color: #000;
+  border: none;
+  padding: 6px 14px;
+  font-weight: 900;
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#taskbar-tabs 
+{
+  display: flex;
+  gap: 6px;
+}
+
+.task-tab 
+{
+  background: transparent;
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 4px 10px;
+  font-size: 11px;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.task-tab.active 
+{
+  background: var(--tab-active);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+#start-menu 
+{
+  position: absolute;
+  bottom: 44px;
+  left: 16px;
+  width: 220px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+}
+
+#start-menu.hidden 
+{
+  display: none;
+}
+
+.start-header 
+{
+  padding: 10px;
+  font-size: 11px;
+  border-bottom: 1px solid var(--border);
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.start-items button 
+{
+  width: 100%;
+  text-align: left;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.start-items button:hover 
+{
+  background: rgba(245, 243, 243, 0.08);
+  color: var(--accent);
+}
+
+.clock 
+{
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: bold;
+}
