@@ -11,18 +11,21 @@ const appTitles = {
   themes: 'THEME SELECTOR'
 };
 
-function updateClock() {
+function updateClock() 
+{
   const now = new Date();
   document.getElementById('systemClock').innerText = now.toTimeString().split(' ')[0];
 }
 setInterval(updateClock, 1000);
 updateClock();
 
-function toggleStartMenu() {
+function toggleStartMenu() 
+{
   document.getElementById('start-menu').classList.toggle('hidden');
 }
 
-function openApp(type) {
+function openApp(type) 
+{
   let win = document.getElementById(`win-${type}`);
   
   if (win) {
@@ -43,7 +46,8 @@ function openApp(type) {
 
   let bodyContent = '';
 
-  if (type === 'terminal') {
+  if (type === 'terminal') 
+    {
     bodyContent = `
       <div class="terminal-logs" id="term-logs">
         <div>CyberOS Shell [v3.0]. Type <span style="color:var(--accent);">help</span>.</div>
@@ -53,10 +57,14 @@ function openApp(type) {
         <input class="terminal-input" id="term-in" autofocus onkeydown="handleTerminal(event)"/>
       </div>
     `;
-  } else if (type === 'notepad') {
+  }
+   else if (type === 'notepad') 
+    {
     const saved = localStorage.getItem('cyber_note') || '';
     bodyContent = `<textarea class="pad" oninput="localStorage.setItem('cyber_note', this.value)" placeholder="Enter persistent notes...">${saved}</textarea>`;
-  } else if (type === 'files') {
+  } 
+  else if (type === 'files') 
+    {
     bodyContent = `
       <div class="file-list">
         <div class="file-item" onclick="openApp('notepad')">📄 notes.txt <span>1 KB</span></div>
@@ -65,7 +73,9 @@ function openApp(type) {
         <div class="file-item" onclick="alert('Access Denied: Encrypted Keyring')">🔒 root_access.key <span>4 KB</span></div>
       </div>
     `;
-  } else if (type === 'calc') {
+  } 
+  else if (type === 'calc') 
+    {
     bodyContent = `
       <div class="calc-container">
         <input class="calc-display" id="calc-display" readonly value="0" />
@@ -93,15 +103,21 @@ function openApp(type) {
         </div>
       </div>
     `;
-  } else if (type === 'visualizer') {
+  } 
+  else if (type === 'visualizer') 
+    {
     bodyContent = `<canvas id="matrixCanvas" width="430" height="230"></canvas>`;
-  } else if (type === 'system') {
+  }
+   else if (type === 'system') 
+    {
     bodyContent = `
       <p><strong>KERNEL:</strong> CyberOS 3.0.1-LTS</p>
       <p><strong>MODULES:</strong> MathEngine, CanvasStream, SecureBash</p>
       <p><strong>STATUS:</strong> All Subsystems Nominal</p>
     `;
-  } else if (type === 'themes') {
+  }
+   else if (type === 'themes') 
+    {
     bodyContent = `
       <p>Select visual profile:</p>
       <div class="theme-btn-grid">
@@ -133,22 +149,27 @@ function openApp(type) {
   }
 }
 
-function bringToFront(win) {
+function bringToFront(win) 
+{
   win.style.zIndex = ++highestZ;
   updateTaskbar();
 }
 
-function minimizeWindow(id) {
+function minimizeWindow(id) 
+{
   document.getElementById(id).classList.add('minimized');
   updateTaskbar();
 }
 
-function toggleMaximize(id) {
+function toggleMaximize(id) 
+{
   document.getElementById(id).classList.toggle('maximized');
 }
 
-function closeWindow(id) {
-  if (id === 'win-visualizer' && matrixInterval) {
+function closeWindow(id) 
+{
+  if (id === 'win-visualizer' && matrixInterval) 
+    {
     clearInterval(matrixInterval);
     matrixInterval = null;
   }
@@ -156,12 +177,13 @@ function closeWindow(id) {
   updateTaskbar();
 }
 
-function setTheme(name) {
+function setTheme(name) 
+{
   document.body.setAttribute('data-theme', name);
 }
 
-// Calculator Logic
-function calcAction(val) {
+function calcAction(val) 
+{
   const display = document.getElementById('calc-display');
   if (!display) return;
 
@@ -169,15 +191,20 @@ function calcAction(val) {
     display.value = '0';
   } else if (val === 'DEL') {
     display.value = display.value.length > 1 ? display.value.slice(0, -1) : '0';
-  } else if (val === '=') {
+  } else if (val === '=') 
+    {
     try {
-      // Safe arithmetic evaluator replacing non-math characters
+
       const cleanExpr = display.value.replace(/[^0-9+\-*/().]/g, '');
       display.value = Function(`'use strict'; return (${cleanExpr})`)();
-    } catch {
+    } 
+    catch 
+    {
       display.value = 'ERR';
     }
-  } else {
+  }
+   else
+     {
     if (display.value === '0' || display.value === 'ERR') {
       display.value = val;
     } else {
@@ -186,7 +213,8 @@ function calcAction(val) {
   }
 }
 
-function startMatrixRain() {
+function startMatrixRain() 
+{
   const canvas = document.getElementById('matrixCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
@@ -205,11 +233,13 @@ function startMatrixRain() {
     ctx.fillStyle = '#00ffcc';
     ctx.font = `${fontSize}px monospace`;
 
-    for (let i = 0; i < drops.length; i++) {
+    for (let i = 0; i < drops.length; i++) 
+      {
       const text = chars[Math.floor(Math.random() * chars.length)];
       ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) 
+        {
         drops[i] = 0;
       }
       drops[i]++;
@@ -217,7 +247,8 @@ function startMatrixRain() {
   }, 40);
 }
 
-function updateTaskbar() {
+function updateTaskbar() 
+{
   const container = document.getElementById('taskbar-tabs');
   container.innerHTML = '';
 
@@ -240,7 +271,8 @@ function updateTaskbar() {
   });
 }
 
-function handleTerminal(e) {
+function handleTerminal(e) 
+{
   if (e.key === 'Enter') {
     const input = e.target.value.trim();
     const logs = document.getElementById('term-logs');
@@ -262,7 +294,9 @@ function handleTerminal(e) {
         try {
           const expr = parts.slice(1).join('');
           res.innerText = Function(`'use strict'; return (${expr.replace(/[^0-9+\-*/().]/g, '')})`)();
-        } catch {
+        } 
+        catch 
+        {
           res.innerText = 'Evaluation error.';
         }
         break;
@@ -275,10 +309,13 @@ function handleTerminal(e) {
         }
         break;
       case 'theme':
-        if (['cyberpunk', 'matrix', 'synthwave'].includes(parts[1])) {
+        if (['cyberpunk', 'matrix', 'synthwave'].includes(parts[1])) 
+          {
           setTheme(parts[1]);
           res.innerText = `Applied theme: ${parts[1]}`;
-        } else {
+        }
+         else 
+          {
           res.innerText = 'Usage: theme [cyberpunk | matrix | synthwave]';
         }
         break;
@@ -299,19 +336,22 @@ function handleTerminal(e) {
   }
 }
 
-function startDrag(e, id) {
+function startDrag(e, id) 
+{
   const win = document.getElementById(id);
   if (win.classList.contains('maximized')) return;
 
   let shiftX = e.clientX - win.getBoundingClientRect().left;
   let shiftY = e.clientY - win.getBoundingClientRect().top;
 
-  function moveAt(pageX, pageY) {
+  function moveAt(pageX, pageY) 
+  {
     win.style.left = Math.max(0, pageX - shiftX) + 'px';
     win.style.top = Math.max(0, pageY - shiftY) + 'px';
   }
 
-  function onMouseMove(event) {
+  function onMouseMove(event) 
+  {
     moveAt(event.pageX, event.pageY);
   }
 
