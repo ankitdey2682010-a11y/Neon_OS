@@ -1,66 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>CYBER_OS v3.0</title>
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TerminalOS</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body data-theme="cyberpunk">
+<body data-theme="dark">
 
-  <div id="desktop">
-    <div class="desktop-icon" onclick="openApp('terminal')">
-      <div class="icon">📟</div>
-      <span>TERMINAL</span>
-    </div>
-    <div class="desktop-icon" onclick="openApp('files')">
-      <div class="icon">📁</div>
-      <span>EXPLORER </span>
-    </div>
-    <div class="desktop-icon" onclick="openApp('calc')">
-      <div class="icon">🧮</div>
-      <span>CALC</span>
-    </div>
-    <div class="desktop-icon" onclick="openApp('visualizer')">
-      <div class="icon">🌌</div>
-      <span>MATRIX</span>
-    </div>
-    <div class="desktop-icon" onclick="openApp('notepad')">
+  <main id="workspace">
+    <div class="shortcut" data-app="notes">
       <div class="icon">📝</div>
-      <span>NOTES</span>
+      <span>Notes</span>
     </div>
-    <div class="desktop-icon" onclick="openApp('system')">
+    <div class="shortcut" data-app="calc">
+      <div class="icon">🔢</div>
+      <span>Calculator</span>
+    </div>
+    <div class="shortcut" data-app="console">
+      <div class="icon">💻</div>
+      <span>Console</span>
+    </div>
+    <div class="shortcut" data-app="settings">
       <div class="icon">⚙️</div>
-      <span>SYSTEM</span>
+      <span>Settings</span>
     </div>
-    <div class="desktop-icon" onclick="openApp('themes')">
-      <div class="icon">🎨</div>
-      <span>THEMES</span>
-    </div>
-  </div>
+  </main>
 
-  <div id="start-menu" class="hidden">
-    <div class="start-header">
-      <span class="user-badge">OPERATOR // ROOT</span>
-    </div>
-    <div class="start-items">
-      <button onclick="openApp('terminal'); toggleStartMenu();">📟 Terminal</button>
-      <button onclick="openApp('files'); toggleStartMenu();">📁 File Explorer</button>
-      <button onclick="openApp('calc'); toggleStartMenu();">🧮 Calculator</button>
-      <button onclick="openApp('visualizer'); toggleStartMenu();">🌌 Matrix Rain</button>
-      <button onclick="openApp('notepad'); toggleStartMenu();">📝 Notepad</button>
-      <button onclick="openApp('system'); toggleStartMenu();">⚙️ System Diagnostics</button>
-      <button onclick="openApp('themes'); toggleStartMenu();">🎨 Themes & Display</button>
-    </div>
-  </div>
+  <!-- Start Launcher Dropup -->
+  <aside id="launcher" class="hidden">
+    <div class="user-strip">user@local-machine</div>
+    <ul>
+      <li data-app="notes">Text Editor</li>
+      <li data-app="calc">Calculator</li>
+      <li data-app="console">Command Prompt</li>
+      <li data-app="settings">Theme Settings</li>
+    </ul>
+  </aside>
 
-  <div id="taskbar">
-    <div class="taskbar-left">
-      <button class="start-btn" onclick="toggleStartMenu()">ROOT</button>
-      <div id="taskbar-tabs"></div>
+  <!-- Bottom Panel -->
+  <footer id="panel">
+    <button id="start-btn">Menu</button>
+    <div id="active-tasks"></div>
+    <time id="clock">--:--</time>
+  </footer>
+
+  <!-- App Window Templates -->
+  <template id="tpl-notes">
+    <div class="app-notes">
+      <textarea id="scratchpad" placeholder="Type something..."></textarea>
     </div>
-    <div class="clock" id="systemClock">00:00:00</div>
-  </div>
+  </template>
+
+  <template id="tpl-calc">
+    <div class="app-calc">
+      <input type="text" id="calc-screen" readonly value="0">
+      <div class="calc-keys">
+        <button class="key-fn" data-key="clear">C</button>
+        <button class="key-fn" data-key="back">⌫</button>
+        <button class="key-op" data-key="/">÷</button>
+        <button class="key-op" data-key="*">×</button>
+        <button class="key-num" data-key="7">7</button>
+        <button class="key-num" data-key="8">8</button>
+        <button class="key-num" data-key="9">9</button>
+        <button class="key-op" data-key="-">-</button>
+        <button class="key-num" data-key="4">4</button>
+        <button class="key-num" data-key="5">5</button>
+        <button class="key-num" data-key="6">6</button>
+        <button class="key-op" data-key="+">+</button>
+        <button class="key-num" data-key="1">1</button>
+        <button class="key-num" data-key="2">2</button>
+        <button class="key-num" data-key="3">3</button>
+        <button class="key-eq" data-key="=">=</button>
+        <button class="key-num key-zero" data-key="0">0</button>
+        <button class="key-num" data-key=".">.</button>
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-console">
+    <div class="app-console">
+      <div class="output-log"></div>
+      <div class="input-line">
+        <span class="prompt">$</span>
+        <input type="text" class="cmd-input" spellcheck="false" autocomplete="off">
+      </div>
+    </div>
+  </template>
+
+  <template id="tpl-settings">
+    <div class="app-settings">
+      <label>Interface Theme</label>
+      <select id="theme-picker">
+        <option value="dark">Monokai Dark</option>
+        <option value="emerald">Matrix Emerald</option>
+        <option value="amber">Retro Amber</option>
+      </select>
+    </div>
+  </template>
 
   <script src="script.js"></script>
 </body>
