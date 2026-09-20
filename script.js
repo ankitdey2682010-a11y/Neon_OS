@@ -1,363 +1,279 @@
-let highestZ = 10;
-let matrixInterval = null;
+(function () {
+  let topZ = 10;
+  const activeWindows = {};
 
-const appTitles = {
-  terminal: 'TERMINAL // BASH',
-  notepad: 'SCRATCHPAD.TXT',
-  files: 'FILE EXPLORER',
-  calc: 'QUANTUM CALCULATOR',
-  visualizer: 'MATRIX RAIN // STREAM',
-  system: 'SYSTEM DIAGNOSTICS',
-  themes: 'THEME SELECTOR'
-};
+  const appMeta = {
+    notes: { title: 'Scratchpad', width: 360, height: 260 },
+    calc: { title: 'Calculator', width: 260, height: 320 },
+    console: { title: 'System Console', width: 440, height: 260 },
+    settings: { title: 'Appearance', width: 280, height: 160 }
+  };
 
-function updateClock() 
-{
-  const now = new Date();
-  document.getElementById('systemClock').innerText = now.toTimeString().split(' ')[0];
-}
-setInterval(updateClock, 1000);
-updateClock();
+  // Clock
+  const clockEl = document.getElementById('clock');
+  function tick() {
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  setInterval(tick, 1000);
+  tick();
 
-function toggleStartMenu() 
-{
-  document.getElementById('start-menu').classList.toggle('hidden');
-}
+  // Launcher Toggle
+  const launcher = document.getElementById('launcher');
+  const startBtn = document.getElementById('start-btn');
 
-function openApp(type) 
-{
-  let win = document.getElementById(`win-${type}`);
-  
-  if (win) {
-    if (win.classList.contains('minimized')) {
-      win.classList.remove('minimized');
+  startBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    launcher.classList.toggle('hidden');
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!launcher.contains(e.target) && e.target !== startBtn) {
+      launcher.classList.add('hidden');
     }
-    bringToFront(win);
-    updateTaskbar();
-    return;
-  }
+  });
 
-  win = document.createElement('div');
-  win.className = 'window';
-  win.id = `win-${type}`;
-  win.style.left = `${50 + Math.random() * 50}px`;
-  win.style.top = `${40 + Math.random() * 40}px`;
-  win.style.zIndex = ++highestZ;
+  // App launch event delegation
+  document.querySelectorAll('[data-app]').forEach(el => {
+    el.addEventListener('click', () => {
+      spawnWindow(el.dataset.app);
+      launcher.classList.add('hidden');
+    });
+  });
 
-  let bodyContent = '';
+  function spawnWindow(id) {
+    if (activeWindows[id]) {
+      const win = activeWindows[id];
+      win.classList.remove('minimized');
+      focusWindow(win);
+      return;
+    }
 
-  if (type === 'terminal') 
-    {
-    bodyContent = `
-      <div class="terminal-logs" id="term-logs">
-        <div>CyberOS Shell [v3.0]. Type <span style="color:var(--accent);">help</span>.</div>
-      </div>
-      <div class="terminal-input-row">
-        <span style="color: var(--accent);">&gt;</span>
-        <input class="terminal-input" id="term-in" autofocus onkeydown="handleTerminal(event)"/>
-      </div>
-    `;
-  }
-   else if (type === 'notepad') 
-    {
-    const saved = localStorage.getItem('cyber_note') || '';
-    bodyContent = `<textarea class="pad" oninput="localStorage.setItem('cyber_note', this.value)" placeholder="Enter persistent notes...">${saved}</textarea>`;
-  } 
-  else if (type === 'files') 
-    {
-    bodyContent = `
-      <div class="file-list">
-        <div class="file-item" onclick="openApp('notepad')">📄 notes.txt <span>1 KB</span></div>
-        <div class="file-item" onclick="openApp('calc')">🧮 math_core.exe <span>14 KB</span></div>
-        <div class="file-item" onclick="openApp('visualizer')">🌌 matrix_stream.sh <span>8 KB</span></div>
-        <div class="file-item" onclick="alert('Access Denied: Encrypted Keyring')">🔒 root_access.key <span>4 KB</span></div>
-      </div>
-    `;
-  } 
-  else if (type === 'calc') 
-    {
-    bodyContent = `
-      <div class="calc-container">
-        <input class="calc-display" id="calc-display" readonly value="0" />
-        <div class="calc-grid">
-          <button class="op" onclick="calcAction('C')">C</button>
-          <button class="op" onclick="calcAction('(')">(</button>
-          <button class="op" onclick="calcAction(')')">)</button>
-          <button class="op" onclick="calcAction('/')">/</button>
-          <button onclick="calcAction('7')">7</button>
-          <button onclick="calcAction('8')">8</button>
-          <button onclick="calcAction('9')">9</button>
-          <button class="op" onclick="calcAction('*')">*</button>
-          <button onclick="calcAction('4')">4</button>
-          <button onclick="calcAction('5')">5</button>
-          <button onclick="calcAction('6')">6</button>
-          <button class="op" onclick="calcAction('-')">-</button>
-          <button onclick="calcAction('1')">1</button>
-          <button onclick="calcAction('2')">2</button>
-          <button onclick="calcAction('3')">3</button>
-          <button class="op" onclick="calcAction('+')">+</button>
-          <button onclick="calcAction('0')">0</button>
-          <button onclick="calcAction('.')">.</button>
-          <button class="op" onclick="calcAction('DEL')">←</button>
-          <button class="equals" onclick="calcAction('=')">=</button>
+    const tpl = document.getElementById(`tpl-${id}`);
+    if (!tpl) return;
+
+    const frame = document.createElement('div');
+    frame.className = 'win-frame';
+    frame.id = `win-${id}`;
+    frame.style.width = `${appMeta[id].width}px`;
+    frame.style.height = `${appMeta[id].height}px`;
+    frame.style.left = `${60 + Object.keys(activeWindows).length * 24}px`;
+    frame.style.top = `${60 + Object.keys(activeWindows).length * 24}px`;
+    frame.style.zIndex = ++topZ;
+
+    frame.innerHTML = `
+      <div class="win-titlebar">
+        <span class="win-title">${appMeta[id].title}</span>
+        <div class="win-actions">
+          <button class="btn-min"></button>
+          <button class="btn-max"></button>
+          <button class="btn-close"></button>
         </div>
       </div>
+      <div class="win-content"></div>
     `;
-  } 
-  else if (type === 'visualizer') 
-    {
-    bodyContent = `<canvas id="matrixCanvas" width="430" height="230"></canvas>`;
-  }
-   else if (type === 'system') 
-    {
-    bodyContent = `
-      <p><strong>KERNEL:</strong> CyberOS 3.0.1-LTS</p>
-      <p><strong>MODULES:</strong> MathEngine, CanvasStream, SecureBash</p>
-      <p><strong>STATUS:</strong> All Subsystems Nominal</p>
-    `;
-  }
-   else if (type === 'themes') 
-    {
-    bodyContent = `
-      <p>Select visual profile:</p>
-      <div class="theme-btn-grid">
-        <button class="theme-btn" onclick="setTheme('cyberpunk')">CYBERPUNK</button>
-        <button class="theme-btn" onclick="setTheme('matrix')">MATRIX</button>
-        <button class="theme-btn" onclick="setTheme('synthwave')">SYNTHWAVE</button>
-      </div>
-    `;
+
+    frame.querySelector('.win-content').appendChild(tpl.content.cloneNode(true));
+    document.body.appendChild(frame);
+    activeWindows[id] = frame;
+
+    bindControls(frame, id);
+    setupAppLogic(id, frame);
+    syncPanel();
+    focusWindow(frame);
   }
 
-  win.innerHTML = `
-    <div class="window-header" onmousedown="startDrag(event, '${win.id}')">
-      <span class="window-title">${appTitles[type]}</span>
-      <div class="window-controls">
-        <button onclick="minimizeWindow('${win.id}')">_</button>
-        <button onclick="toggleMaximize('${win.id}')">□</button>
-        <button onclick="closeWindow('${win.id}')">✕</button>
-      </div>
-    </div>
-    <div class="window-body">${bodyContent}</div>
-  `;
-
-  win.addEventListener('mousedown', () => bringToFront(win));
-  document.body.appendChild(win);
-  updateTaskbar();
-
-  if (type === 'visualizer') {
-    startMatrixRain();
+  function focusWindow(el) {
+    el.style.zIndex = ++topZ;
+    document.querySelectorAll('.task-item').forEach(t => {
+      t.classList.toggle('active', t.dataset.target === el.id);
+    });
   }
-}
 
-function bringToFront(win) 
-{
-  win.style.zIndex = ++highestZ;
-  updateTaskbar();
-}
+  function bindControls(win, id) {
+    const titlebar = win.querySelector('.win-titlebar');
 
-function minimizeWindow(id) 
-{
-  document.getElementById(id).classList.add('minimized');
-  updateTaskbar();
-}
+    win.addEventListener('mousedown', () => focusWindow(win));
 
-function toggleMaximize(id) 
-{
-  document.getElementById(id).classList.toggle('maximized');
-}
+    // Dragging
+    titlebar.addEventListener('mousedown', (e) => {
+      if (e.target.tagName.toLowerCase() === 'button') return;
+      if (win.classList.contains('maximized')) return;
 
-function closeWindow(id) 
-{
-  if (id === 'win-visualizer' && matrixInterval) 
-    {
-    clearInterval(matrixInterval);
-    matrixInterval = null;
-  }
-  document.getElementById(id).remove();
-  updateTaskbar();
-}
+      const rect = win.getBoundingClientRect();
+      const offsetLeft = e.clientX - rect.left;
+      const offsetTop = e.clientY - rect.top;
 
-function setTheme(name) 
-{
-  document.body.setAttribute('data-theme', name);
-}
-
-function calcAction(val) 
-{
-  const display = document.getElementById('calc-display');
-  if (!display) return;
-
-  if (val === 'C') {
-    display.value = '0';
-  } else if (val === 'DEL') {
-    display.value = display.value.length > 1 ? display.value.slice(0, -1) : '0';
-  } else if (val === '=') 
-    {
-    try {
-
-      const cleanExpr = display.value.replace(/[^0-9+\-*/().]/g, '');
-      display.value = Function(`'use strict'; return (${cleanExpr})`)();
-    } 
-    catch 
-    {
-      display.value = 'ERR';
-    }
-  }
-   else
-     {
-    if (display.value === '0' || display.value === 'ERR') {
-      display.value = val;
-    } else {
-      display.value += val;
-    }
-  }
-}
-
-function startMatrixRain() 
-{
-  const canvas = document.getElementById('matrixCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  
-  const chars = '0123456789ABCDEFｦｱｳｴｵｶｷｹｺｻｼｽｾｿﾀﾂﾃﾅﾆﾇﾈ';
-  const fontSize = 12;
-  const columns = Math.floor(canvas.width / fontSize);
-  const drops = Array(columns).fill(1);
-
-  if (matrixInterval) clearInterval(matrixInterval);
-
-  matrixInterval = setInterval(() => {
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
-    ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-    ctx.fillStyle = '#00ffcc';
-    ctx.font = `${fontSize}px monospace`;
-
-    for (let i = 0; i < drops.length; i++) 
-      {
-      const text = chars[Math.floor(Math.random() * chars.length)];
-      ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-      if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) 
-        {
-        drops[i] = 0;
+      function onMove(ev) {
+        win.style.left = `${ev.clientX - offsetLeft}px`;
+        win.style.top = `${ev.clientY - offsetTop}px`;
       }
-      drops[i]++;
-    }
-  }, 40);
-}
 
-function updateTaskbar() 
-{
-  const container = document.getElementById('taskbar-tabs');
-  container.innerHTML = '';
-
-  const windows = Array.from(document.querySelectorAll('.window'));
-  windows.forEach(win => {
-    const type = win.id.replace('win-', '');
-    const tab = document.createElement('button');
-    tab.className = 'task-tab' + (!win.classList.contains('minimized') ? ' active' : '');
-    tab.innerText = type.toUpperCase();
-    tab.onclick = () => {
-      if (win.classList.contains('minimized')) {
-        win.classList.remove('minimized');
-        bringToFront(win);
-      } else {
-        win.classList.add('minimized');
+      function onUp() {
+        window.removeEventListener('mousemove', onMove);
+        window.removeEventListener('mouseup', onUp);
       }
-      updateTaskbar();
-    };
-    container.appendChild(tab);
-  });
-}
 
-function handleTerminal(e) 
-{
-  if (e.key === 'Enter') {
-    const input = e.target.value.trim();
-    const logs = document.getElementById('term-logs');
-    if (!input) return;
+      window.addEventListener('mousemove', onMove);
+      window.addEventListener('mouseup', onUp);
+    });
 
-    const cmd = document.createElement('div');
-    cmd.innerHTML = `<span style="color:var(--text-dim);">&gt; ${input}</span>`;
-    logs.appendChild(cmd);
+    win.querySelector('.btn-close').addEventListener('click', () => {
+      win.remove();
+      delete activeWindows[id];
+      syncPanel();
+    });
 
-    const parts = input.split(' ');
-    const command = parts[0].toLowerCase();
-    const res = document.createElement('div');
+    win.querySelector('.btn-min').addEventListener('click', () => {
+      win.classList.add('minimized');
+      syncPanel();
+    });
 
-    switch (command) {
-      case 'help':
-        res.innerHTML = 'Commands: <span style="color:var(--accent)">open [app], calc [expr], theme [name], clear, time</span>';
-        break;
-      case 'calc':
-        try {
-          const expr = parts.slice(1).join('');
-          res.innerText = Function(`'use strict'; return (${expr.replace(/[^0-9+\-*/().]/g, '')})`)();
-        } 
-        catch 
-        {
-          res.innerText = 'Evaluation error.';
-        }
-        break;
-      case 'open':
-        if (appTitles[parts[1]]) {
-          openApp(parts[1]);
-          res.innerText = `Launched: ${parts[1]}`;
+    win.querySelector('.btn-max').addEventListener('click', () => {
+      win.classList.toggle('maximized');
+    });
+  }
+
+  function syncPanel() {
+    const container = document.getElementById('active-tasks');
+    container.innerHTML = '';
+
+    Object.keys(activeWindows).forEach(key => {
+      const win = activeWindows[key];
+      const btn = document.createElement('button');
+      btn.className = 'task-item';
+      btn.dataset.target = win.id;
+      btn.textContent = appMeta[key].title;
+
+      if (!win.classList.contains('minimized')) {
+        btn.classList.add('active');
+      }
+
+      btn.addEventListener('click', () => {
+        if (win.classList.contains('minimized')) {
+          win.classList.remove('minimized');
+          focusWindow(win);
         } else {
-          res.innerText = `Unknown application: ${parts[1]}`;
+          win.classList.add('minimized');
         }
-        break;
-      case 'theme':
-        if (['cyberpunk', 'matrix', 'synthwave'].includes(parts[1])) 
-          {
-          setTheme(parts[1]);
-          res.innerText = `Applied theme: ${parts[1]}`;
-        }
-         else 
-          {
-          res.innerText = 'Usage: theme [cyberpunk | matrix | synthwave]';
-        }
-        break;
-      case 'clear':
-        logs.innerHTML = '';
-        e.target.value = '';
-        return;
-      case 'time':
-        res.innerText = new Date().toISOString();
-        break;
-      default:
-        res.style.color = 'var(--magenta)';
-        res.innerText = `Command not recognized: "${input}"`;
+        syncPanel();
+      });
+
+      container.appendChild(btn);
+    });
+  }
+
+  function setupAppLogic(id, win) {
+    if (id === 'notes') {
+      const pad = win.querySelector('#scratchpad');
+      pad.value = localStorage.getItem('plain_notes') || '';
+      pad.addEventListener('input', () => localStorage.setItem('plain_notes', pad.value));
     }
 
-    logs.appendChild(res);
-    e.target.value = '';
+    if (id === 'settings') {
+      const picker = win.querySelector('#theme-picker');
+      picker.value = document.body.getAttribute('data-theme') || 'dark';
+      picker.addEventListener('change', (e) => {
+        document.body.setAttribute('data-theme', e.target.value);
+      });
+    }
+
+    if (id === 'calc') {
+      const screen = win.querySelector('#calc-screen');
+      let acc = null;
+      let nextOp = null;
+      let freshEntry = true;
+
+      win.querySelector('.calc-keys').addEventListener('click', (e) => {
+        if (!e.target.dataset.key) return;
+        const key = e.target.dataset.key;
+
+        if (!isNaN(key) || key === '.') {
+          if (freshEntry) {
+            screen.value = key === '.' ? '0.' : key;
+            freshEntry = false;
+          } else {
+            if (key === '.' && screen.value.includes('.')) return;
+            screen.value += key;
+          }
+        } else if (key === 'clear') {
+          acc = null;
+          nextOp = null;
+          screen.value = '0';
+          freshEntry = true;
+        } else if (key === 'back') {
+          screen.value = screen.value.slice(0, -1) || '0';
+        } else if (['+', '-', '*', '/'].includes(key)) {
+          acc = parseFloat(screen.value);
+          nextOp = key;
+          freshEntry = true;
+        } else if (key === '=') {
+          if (nextOp && acc !== null) {
+            const cur = parseFloat(screen.value);
+            let res = 0;
+            if (nextOp === '+') res = acc + cur;
+            if (nextOp === '-') res = acc - cur;
+            if (nextOp === '*') res = acc * cur;
+            if (nextOp === '/') res = cur === 0 ? 'Error' : acc / cur;
+            screen.value = String(res);
+            acc = null;
+            nextOp = null;
+            freshEntry = true;
+          }
+        }
+      });
+    }
+
+    if (id === 'console') {
+      const log = win.querySelector('.output-log');
+      const input = win.querySelector('.cmd-input');
+
+      function printLine(text) {
+        const item = document.createElement('div');
+        item.textContent = text;
+        log.appendChild(item);
+        log.scrollTop = log.scrollHeight;
+      }
+
+      printLine('System shell online. Type "help" to list commands.');
+
+      input.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        const val = input.value.trim();
+        if (!val) return;
+
+        printLine(`$ ${val}`);
+        input.value = '';
+
+        const args = val.split(' ');
+        const root = args[0].toLowerCase();
+
+        switch (root) {
+          case 'help':
+            printLine('Commands: open <app>, clear, theme <name>, date');
+            break;
+          case 'clear':
+            log.innerHTML = '';
+            break;
+          case 'date':
+            printLine(new Date().toString());
+            break;
+          case 'open':
+            if (appMeta[args[1]]) spawnWindow(args[1]);
+            else printLine(`App not found: ${args[1]}`);
+            break;
+          case 'theme':
+            if (['dark', 'emerald', 'amber'].includes(args[1])) {
+              document.body.setAttribute('data-theme', args[1]);
+              printLine(`Theme: ${args[1]}`);
+            } else {
+              printLine('Options: dark, emerald, amber');
+            }
+            break;
+          default:
+            printLine(`Unknown command: ${root}`);
+        }
+      });
+    }
   }
-}
-
-function startDrag(e, id) 
-{
-  const win = document.getElementById(id);
-  if (win.classList.contains('maximized')) return;
-
-  let shiftX = e.clientX - win.getBoundingClientRect().left;
-  let shiftY = e.clientY - win.getBoundingClientRect().top;
-
-  function moveAt(pageX, pageY) 
-  {
-    win.style.left = Math.max(0, pageX - shiftX) + 'px';
-    win.style.top = Math.max(0, pageY - shiftY) + 'px';
-  }
-
-  function onMouseMove(event) 
-  {
-    moveAt(event.pageX, event.pageY);
-  }
-
-  document.addEventListener('mousemove', onMouseMove);
-  document.onmouseup = function() {
-    document.removeEventListener('mousemove', onMouseMove);
-    document.onmouseup = null;
-  };
-}
+})();
