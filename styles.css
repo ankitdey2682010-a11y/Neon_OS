@@ -1,23 +1,24 @@
-:root {
-  --bg-color: #121417;
-  --surface: #1e2227;
-  --surface-alt: #282c34;
-  --border: #3e4451;
-  --primary: #61afef;
-  --text-main: #abb2bf;
-  --text-muted: #5c6370;
+:root 
+{
+  --bg-color: #14171c;
+  --surface: #16191e;
+  --surface-alt: #252a33;
+  --border: #373d4a;
+  --primary: #55a2e2;
+  --text-main: #9da3ae;
+  --text-muted: #4a505a;
   --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono-stack: "SF Mono", "Fira Code", Consolas, monospace;
 }
 
 body[data-theme="emerald"] {
-  --bg-color: #0b140e;
-  --surface: #102116;
-  --surface-alt: #162f1f;
-  --border: #234e32;
-  --primary: #2ecc71;
-  --text-main: #d0f0db;
-  --text-muted: #4e805f;
+  --bg-color: #08100b;
+  --surface: #0d2014;
+  --surface-alt: #142e1d;
+  --border: #1e4f2f;
+  --primary: #18e06b;
+  --text-main: #b4d2be;
+  --text-muted: #187537;
 }
 
 body[data-theme="amber"] {
@@ -37,7 +38,8 @@ body[data-theme="amber"] {
   user-select: none;
 }
 
-body {
+body 
+{
   height: 100vh;
   overflow: hidden;
   display: flex;
@@ -47,7 +49,8 @@ body {
   font-family: var(--font-stack);
 }
 
-#workspace {
+#workspace 
+{
   flex: 1;
   position: relative;
   padding: 1rem;
@@ -57,7 +60,8 @@ body {
   gap: 12px;
 }
 
-.shortcut {
+.shortcut
+ {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -68,21 +72,24 @@ body {
   padding: 6px;
 }
 
-.shortcut:hover {
+.shortcut:hover 
+{
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-.shortcut .icon {
+.shortcut .icon 
+{
   font-size: 2rem;
 }
 
-.shortcut span {
+.shortcut span 
+{
   font-size: 0.75rem;
   text-align: center;
 }
 
-/* Base Window Structure */
-.win-frame {
+.win-frame 
+{
   position: absolute;
   min-width: 320px;
   min-height: 220px;
@@ -95,7 +102,8 @@ body {
   overflow: hidden;
 }
 
-.win-titlebar {
+.win-titlebar 
+{
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -105,22 +113,26 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.win-titlebar:active {
+.win-titlebar:active 
+{
   cursor: grabbing;
 }
 
-.win-title {
+.win-title 
+{
   font-size: 0.8rem;
   font-weight: 600;
   letter-spacing: 0.5px;
 }
 
-.win-actions {
+.win-actions 
+{
   display: flex;
   gap: 6px;
 }
 
-.win-actions button {
+.win-actions button 
+{
   width: 14px;
   height: 14px;
   border: none;
@@ -128,22 +140,34 @@ body {
   cursor: pointer;
 }
 
-.btn-close { background: #e06c75; }
-.btn-min { background: #e5c07b; }
-.btn-max { background: #98c379; }
+.btn-close 
+{ 
+  background: #e06c75; 
+}
+.btn-min 
+{ 
+  background: #e5c07b;
+ }
+.btn-max 
+{ 
+  background: #98c379;
+ }
 
-.win-content {
+.win-content 
+{
   flex: 1;
   padding: 12px;
   overflow: auto;
   user-select: text;
 }
 
-.win-frame.minimized {
+.win-frame.minimized 
+{
   display: none;
 }
 
-.win-frame.maximized {
+.win-frame.maximized 
+{
   top: 0 !important;
   left: 0 !important;
   width: 100vw !important;
@@ -151,8 +175,8 @@ body {
   border-radius: 0;
 }
 
-/* App Modules */
-.app-notes textarea {
+.app-notes textarea 
+{
   width: 100%;
   height: 180px;
   background: transparent;
@@ -164,13 +188,15 @@ body {
   outline: none;
 }
 
-.app-calc {
+.app-calc 
+{
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-#calc-screen {
+#calc-screen
+ {
   width: 100%;
   height: 38px;
   padding: 0 8px;
@@ -183,13 +209,15 @@ body {
   border-radius: 4px;
 }
 
-.calc-keys {
+.calc-keys 
+{
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
 }
 
-.calc-keys button {
+.calc-keys button 
+{
   padding: 10px 0;
   background: var(--surface-alt);
   border: 1px solid var(--border);
@@ -199,17 +227,20 @@ body {
   cursor: pointer;
 }
 
-.calc-keys button:hover {
-  background: rgba(255, 255, 255, 0.08);
+.calc-keys button:hover 
+{
+  background: rgba(53, 21, 233, 0.844);
 }
 
-.calc-keys button.key-eq {
+.calc-keys button.key-eq 
+{
   background: var(--primary);
   color: var(--bg-color);
   font-weight: bold;
 }
 
-.app-console {
+.app-console 
+{
   font-family: var(--mono-stack);
   font-size: 0.8rem;
   display: flex;
@@ -217,20 +248,23 @@ body {
   height: 100%;
 }
 
-.output-log {
+.output-log 
+{
   flex: 1;
   min-height: 140px;
   overflow-y: auto;
   line-height: 1.4;
 }
 
-.input-line {
+.input-line 
+{
   display: flex;
   gap: 6px;
   align-items: center;
 }
 
-.cmd-input {
+.cmd-input 
+{
   flex: 1;
   background: transparent;
   border: none;
@@ -239,13 +273,15 @@ body {
   font-family: inherit;
 }
 
-.app-settings {
+.app-settings 
+{
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.app-settings select {
+.app-settings select 
+{
   background: var(--surface-alt);
   border: 1px solid var(--border);
   color: var(--text-main);
@@ -253,8 +289,8 @@ body {
   border-radius: 4px;
 }
 
-/* Bottom Bar */
-#panel {
+#panel 
+{
   height: 40px;
   background: var(--surface);
   border-top: 1px solid var(--border);
@@ -264,7 +300,8 @@ body {
   gap: 12px;
 }
 
-#start-btn {
+#start-btn 
+{
   background: var(--surface-alt);
   border: 1px solid var(--border);
   color: var(--primary);
@@ -274,13 +311,15 @@ body {
   cursor: pointer;
 }
 
-#active-tasks {
+#active-tasks 
+{
   flex: 1;
   display: flex;
   gap: 6px;
 }
 
-.task-item {
+.task-item 
+{
   background: var(--surface-alt);
   border: 1px solid var(--border);
   color: var(--text-main);
@@ -290,17 +329,20 @@ body {
   cursor: pointer;
 }
 
-.task-item.active {
+.task-item.active 
+{
   border-color: var(--primary);
   color: var(--primary);
 }
 
-#clock {
+#clock 
+{
   font-family: var(--mono-stack);
   font-size: 0.8rem;
 }
 
-#launcher {
+#launcher 
+{
   position: absolute;
   bottom: 45px;
   left: 10px;
@@ -311,27 +353,32 @@ body {
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
-#launcher.hidden {
+#launcher.hidden 
+{
   display: none;
 }
 
-.user-strip {
+.user-strip 
+{
   padding: 8px 12px;
   border-bottom: 1px solid var(--border);
   font-size: 0.75rem;
   color: var(--text-muted);
 }
 
-#launcher ul {
+#launcher ul 
+{
   list-style: none;
 }
 
-#launcher li {
+#launcher li 
+{
   padding: 8px 12px;
   font-size: 0.8rem;
   cursor: pointer;
 }
 
-#launcher li:hover {
+#launcher li:hover 
+{
   background: rgba(255, 255, 255, 0.05);
 }
