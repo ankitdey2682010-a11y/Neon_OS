@@ -11,14 +11,19 @@
   --mono-stack: "SF Mono", "Fira Code", Consolas, monospace;
 }
 
-body[data-theme="emerald"] {
-  --bg-color: #08100b;
-  --surface: #0d2014;
-  --surface-alt: #142e1d;
-  --border: #1e4f2f;
-  --primary: #18e06b;
-  --text-main: #b4d2be;
-  --text-muted: #187537;
+body 
+{
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-color);
+  background-image: url("background.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--text-main);
+  font-family: var(--font-stack);
 }
 
 body[data-theme="amber"] {
