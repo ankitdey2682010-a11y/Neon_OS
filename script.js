@@ -9,16 +9,6 @@
     settings: { title: 'Appearance', width: 280, height: 160 }
   };
 
-  // Clock
-  const clockEl = document.getElementById('clock');
-  function tick() {
-    const now = new Date();
-    clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  }
-  setInterval(tick, 1000);
-  tick();
-
-  // Launcher Toggle
   const launcher = document.getElementById('launcher');
   const startBtn = document.getElementById('start-btn');
 
@@ -33,7 +23,14 @@
     }
   });
 
-  // App launch event delegation
+   const clockEl = document.getElementById('clock');
+  function tick() {
+    const now = new Date();
+    clockEl.textContent = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  }
+  setInterval(tick, 1000);
+  tick();
+
   document.querySelectorAll('[data-app]').forEach(el => {
     el.addEventListener('click', () => {
       spawnWindow(el.dataset.app);
@@ -41,8 +38,10 @@
     });
   });
 
-  function spawnWindow(id) {
-    if (activeWindows[id]) {
+  function spawnWindow(id) 
+  {
+    if (activeWindows[id]) 
+      {
       const win = activeWindows[id];
       win.classList.remove('minimized');
       focusWindow(win);
@@ -95,7 +94,6 @@
 
     win.addEventListener('mousedown', () => focusWindow(win));
 
-    // Dragging
     titlebar.addEventListener('mousedown', (e) => {
       if (e.target.tagName.toLowerCase() === 'button') return;
       if (win.classList.contains('maximized')) return;
@@ -104,12 +102,14 @@
       const offsetLeft = e.clientX - rect.left;
       const offsetTop = e.clientY - rect.top;
 
-      function onMove(ev) {
+      function onMove(ev) 
+      {
         win.style.left = `${ev.clientX - offsetLeft}px`;
         win.style.top = `${ev.clientY - offsetTop}px`;
       }
 
-      function onUp() {
+      function onUp() 
+      {
         window.removeEventListener('mousemove', onMove);
         window.removeEventListener('mouseup', onUp);
       }
@@ -163,7 +163,8 @@
     });
   }
 
-  function setupAppLogic(id, win) {
+  function setupAppLogic(id, win) 
+  {
     if (id === 'notes') {
       const pad = win.querySelector('#scratchpad');
       pad.value = localStorage.getItem('plain_notes') || '';
