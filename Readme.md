@@ -1,6 +1,6 @@
 # CyberOS
 
-A lightweight, retro cyberpunk-themed desktop environment that runs entirely in your web browser. Built using just vanilla HTML, CSS, and JavaScript with zero external frameworks or dependencies.
+A lightweight, retro cyberpunk-themed desktop environment that runs entirely in your web browser. Built using just  HTML, CSS, and JavaScript with zero external frameworks or dependencies.
 
 ## What's Inside
 
@@ -29,5 +29,6 @@ A lightweight, retro cyberpunk-themed desktop environment that runs entirely in 
 - `index.html`
 - `styles.css`
 - `script.js`
-
+##  Screenshot
+![alt text](<Screenshot 2026-10-25 150425.png>)
 
