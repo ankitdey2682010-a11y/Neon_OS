@@ -1,101 +1,296 @@
+</html>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Terminal_OS</title>
+  <meta name="theme-color" content="#14171c">
+  <title>Cyber OS</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body data-theme="dark">
 
-  <main id="workspace">
-    <div class="shortcut" data-app="notes">
+  <main id="workspace" aria-label="Desktop">
+
+    <section class="desktop-welcome">
+      <div class="eyebrow">LOCAL ENVIRONMENT / V1.2</div>
+
+      <h1>Good to have you back.</h1>
+
+      <p>Your workspace, your rules.</p>
+
+      <div class="system-pills">
+        <span><i class="status-dot"></i> SYSTEM ONLINE</span>
+        <span id="desktop-date">LOADING DATE</span>
+      </div>
+    </section>
+
+    <div class="shortcut" data-app="notes"
+         tabindex="0" role="button" aria-label="Open Notes">
       <div class="icon">📝</div>
       <span>Notes</span>
     </div>
-    <div class="shortcut" data-app="calc">
+
+    <div class="shortcut" data-app="calc"
+         tabindex="0" role="button" aria-label="Open Calculator">
       <div class="icon">🔢</div>
       <span>Calculator</span>
     </div>
-    <div class="shortcut" data-app="console">
-      <div class="icon">💻</div>
+
+    <div class="shortcut" data-app="console"
+         tabindex="0" role="button" aria-label="Open Console">
+      <div class="icon">⌘</div>
       <span>Console</span>
     </div>
-    <div class="shortcut" data-app="settings">
+
+    <div class="shortcut" data-app="settings"
+         tabindex="0" role="button" aria-label="Open Settings">
       <div class="icon">⚙️</div>
       <span>Settings</span>
     </div>
+
   </main>
 
-  <aside id="launcher" class="hidden">
-    <div class="user-strip">user@local-machine</div>
-    <ul>
-      <li data-app="notes">Text Editor</li>
-      <li data-app="calc">Calculator</li>
-      <li data-app="console">Command Prompt</li>
-      <li data-app="settings">Theme Settings</li>
+
+
+  <aside id="launcher" class="hidden" aria-label="Application launcher">
+
+    <div class="launcher-heading">
+      <div>
+        <span class="eyebrow">TERMINAL_OS</span>
+        <h2>Applications</h2>
+      </div>
+
+      <span class="launcher-mark">⌘</span>
+    </div>
+
+    <input
+      id="app-search"
+      type="search"
+      placeholder="Search applications..."
+      autocomplete="off"
+      aria-label="Search applications"
+    >
+
+    <div class="user-strip">
+      <span class="status-dot"></span>
+      user@local-machine
+    </div>
+
+    <ul id="app-list">
+
+      <li data-app="notes">
+        <span>📝</span> Text Editor <kbd>N</kbd>
+      </li>
+
+      <li data-app="calc">
+        <span>🔢</span> Calculator <kbd>C</kbd>
+      </li>
+
+      <li data-app="console">
+        <span>⌘</span> Command Prompt <kbd>&gt;</kbd>
+      </li>
+
+      <li data-app="settings">
+        <span>⚙️</span> Theme Settings <kbd>S</kbd>
+      </li>
+
     </ul>
+
+    <div class="launcher-footer">
+      4 utilities · Local session
+    </div>
+
   </aside>
 
+
+  <!-- TASKBAR -->
+
   <footer id="panel">
-    <button id="start-btn">Menu</button>
-    <div id="active-tasks"></div>
-    <time id="clock">--:--</time>
+
+    <button id="start-btn" aria-expanded="false">
+      <span class="menu-symbol">⌘</span>
+      <span>Menu</span>
+    </button>
+
+    <div class="panel-divider"></div>
+
+    <div id="active-tasks" aria-label="Open applications"></div>
+
+    <div class="tray">
+      <span class="tray-status" title="System online">●</span>
+      <time id="clock">--:--</time>
+    </div>
+
   </footer>
 
   <template id="tpl-notes">
+
     <div class="app-notes">
-      <textarea id="scratchpad" placeholder="Type something..."></textarea>
+
+      <div class="app-toolbar">
+
+        <span class="toolbar-label">
+          PERSONAL SCRATCHPAD
+        </span>
+
+        <span class="save-status" id="notes-status">
+          Saved locally
+        </span>
+
+        <button
+          class="small-action"
+          id="clear-notes"
+          title="Clear notes">
+          Clear
+        </button>
+
+      </div>
+
+      <textarea
+        id="scratchpad"
+        placeholder="Start writing your thoughts here...
+
+Your notes are saved automatically in this browser."
+        spellcheck="true"></textarea>
+
+      <div class="notes-footer">
+        <span id="note-count">0 characters</span>
+        <span>LOCAL STORAGE</span>
+      </div>
+
     </div>
+
   </template>
 
   <template id="tpl-calc">
+
     <div class="app-calc">
-      <input type="text" id="calc-screen" readonly value="0">
+
+      <div class="calc-label">
+        STANDARD CALCULATOR
+      </div>
+
+      <input
+        type="text"
+        id="calc-screen"
+        readonly
+        value="0"
+        aria-label="Calculator display"
+      >
+
       <div class="calc-keys">
-        <button class="key-fn" data-key="clear">C</button>
+
+        <button class="key-fn" data-key="clear">AC</button>
         <button class="key-fn" data-key="back">⌫</button>
+        <button class="key-op" data-key="%">%</button>
         <button class="key-op" data-key="/">÷</button>
-        <button class="key-op" data-key="*">×</button>
+
         <button class="key-num" data-key="7">7</button>
         <button class="key-num" data-key="8">8</button>
         <button class="key-num" data-key="9">9</button>
-        <button class="key-op" data-key="-">-</button>
+        <button class="key-op" data-key="*">×</button>
+
         <button class="key-num" data-key="4">4</button>
         <button class="key-num" data-key="5">5</button>
         <button class="key-num" data-key="6">6</button>
-        <button class="key-op" data-key="+">+</button>
+        <button class="key-op" data-key="-">−</button>
+
         <button class="key-num" data-key="1">1</button>
         <button class="key-num" data-key="2">2</button>
         <button class="key-num" data-key="3">3</button>
-        <button class="key-eq" data-key="=">=</button>
+        <button class="key-op" data-key="+">+</button>
+
         <button class="key-num key-zero" data-key="0">0</button>
         <button class="key-num" data-key=".">.</button>
-      </div>
-    </div>
-  </template>
+        <button class="key-eq" data-key="=">=</button>
 
+      </div>
+
+      <div class="calc-footnote">
+        Keyboard input supported
+      </div>
+
+    </div>
+
+  </template>
   <template id="tpl-console">
-    <div class="app-console">
-      <div class="output-log"></div>
-      <div class="input-line">
-        <span class="prompt">$</span>
-        <input type="text" class="cmd-input" spellcheck="false" autocomplete="off">
-      </div>
-    </div>
-  </template>
 
+    <div class="app-console">
+
+      <div class="console-top">
+
+        <span class="status-dot"></span>
+        TERMINAL_OS
+
+        <span class="console-version">v1.2</span>
+
+        <button id="console-clear" class="small-action">
+          Clear
+        </button>
+
+      </div>
+
+      <div class="output-log" aria-live="polite"></div>
+
+      <div class="input-line">
+
+        <span class="prompt">user@local:~$</span>
+
+        <input
+          type="text"
+          class="cmd-input"
+          spellcheck="false"
+          autocomplete="off"
+          aria-label="Console command"
+        >
+
+      </div>
+
+      <div class="console-help">
+        Type <b>help</b> to see available commands.
+      </div>
+
+    </div>
+
+  </template>
   <template id="tpl-settings">
+
     <div class="app-settings">
-      <label>Interface Theme</label>
+
+      <div class="settings-intro">
+
+        <span class="eyebrow">PERSONALIZATION</span>
+
+        <h3>Make it yours.</h3>
+
+        <p>Choose a desktop accent.</p>
+
+      </div>
+
+      <label for="theme-picker">
+        Interface theme
+      </label>
+
       <select id="theme-picker">
-        <option value="dark">Monokai Dark</option>
+
+        <option value="dark">Midnight Blue</option>
         <option value="emerald">Matrix Emerald</option>
         <option value="amber">Retro Amber</option>
+
       </select>
+
+      <div class="settings-note">
+        Theme preference is saved on this device.
+      </div>
+
     </div>
+
   </template>
 
+
   <script src="script.js"></script>
+
 </body>
 </html>
